@@ -6,11 +6,13 @@ const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-                const user = await User.findOne({ _id: context.user._id });
-                return user;
+              const userData = await User.findOne({ _id: context.user._id }).select('-__v -password');
+      
+              return userData;
             }
-            throw new AuthenticationError('You must be logged in!')
-        }
+      
+            throw new AuthenticationError('Not logged in');
+          },
     },
 
     Mutation: {
